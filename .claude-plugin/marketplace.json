@@ -1,0 +1,11 @@
+{
+  "name": "fleet-manager-local",
+  "owner": { "name": "Marc Backes", "url": "https://github.com/CallMeTechie" },
+  "plugins": [
+    {
+      "name": "fleet-manager",
+      "source": "./plugin",
+      "description": "Multi-server SSH management for Claude Code: inventory of servers, an active-server model, guided setup, diagnostics and status across a fleet of Linux hosts."
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+[{"Name":"web","Status":"running(2)","ConfigFiles":"/srv/web/docker-compose.yml"},
+ {"Name":"db","Status":"exited(0)","ConfigFiles":"/srv/db/docker-compose.yml,/srv/db/docker-compose.override.yml"},
+ {"Name":"fresh","Status":"created(0)","ConfigFiles":"/srv/fresh/compose.yaml"},
+ {"Name":"broken","Status":"created(0)","ConfigFiles":""}]

@@ -1,0 +1,39 @@
+# Server: EXAMPLE
+<!-- Copy this file to <name>.md (lowercase, [a-z0-9_-]) or let /add-server create it.
+     Real profiles in this directory are git-ignored. Connection fields are single-token
+     and validated; description/os are free text and display-only. -->
+_Populated by /add-server. Do not edit connection fields by hand._
+
+## Connection
+- host: _not configured_
+- port: 22
+- user: _not configured_
+- key_path: ~/.ssh/fleet-manager_ed25519
+- connect_timeout_seconds: 10
+
+## Identity
+- description: _not configured_
+- os: _not configured_
+- arch: _not configured_
+- hostname: _not configured_
+- docker_available: _not configured_
+- docker_cmd: _not configured_
+- sudo_passwordless: _not configured_
+
+## Scoped Operations
+- [ ] system_monitoring
+- [ ] file_operations
+- [ ] package_management
+- [ ] service_management
+- [ ] docker_compose
+- [ ] file_transfer
+
+## Protected Resources
+- critical_compose_projects:
+- protected_paths:
+
+## Discovered State
+_Populated during discovery (df -h, uname -m, /etc/os-release, docker)._
+
+## Last Updated
+_not configured_

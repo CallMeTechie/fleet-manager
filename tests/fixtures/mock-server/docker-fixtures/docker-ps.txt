@@ -1,0 +1,3 @@
+web-app-1	nginx:1.27	Up 3 hours	web
+web-db-1	postgres:16	Up 3 hours	web
+solo-cache	redis:7	Up 1 day
