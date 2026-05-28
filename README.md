@@ -65,6 +65,23 @@ brought up with `/compose-up --file /abs/path/docker-compose.yml`.
 - SSH access to each server; the plugin uses its own key `~/.ssh/fleet-manager_ed25519`.
 - Bash >= 4, OpenSSH client locally.
 
+### Host-key verification (first connection)
+
+The plugin does **not** disable host-key checking — it relies on the OpenSSH
+default, which is the secure choice. Because every connection runs with
+`BatchMode=yes` (no interactive prompts), the **first** connection to a host whose
+key is not yet in your `~/.ssh/known_hosts` will fail rather than silently
+trust-on-first-use. Establish the host key once, out of band, before `/diag`:
+
+```bash
+ssh-keyscan -p <port> <host> >> ~/.ssh/known_hosts   # review the fingerprint first
+# or simply connect once interactively and accept the key:
+ssh -p <port> <user>@<host>
+```
+
+This is intentional: it prevents a silent man-in-the-middle on an unknown host.
+`/setup-ssh` surfaces this as a likely cause when key auth fails.
+
 ## Development
 
 - Unit tests: `for t in tests/unit/*.sh; do bash "$t"; done`

@@ -49,6 +49,14 @@ if "${FM_SSH[@]}" "echo OK" 2>/dev/null | grep -qx OK; then
 fi
 ```
 
+> **Host key (first connection):** the plugin keeps the OpenSSH default for
+> host-key checking (it does **not** auto-trust). With `BatchMode=yes` there is no
+> interactive prompt, so a host whose key is not yet in `~/.ssh/known_hosts` makes
+> this cold test fail. Establish it once, out of band, after reviewing the
+> fingerprint: `ssh-keyscan -p <port> <host> >> ~/.ssh/known_hosts` (or connect
+> once interactively and accept the key). Intentional — it blocks a silent
+> man-in-the-middle on an unknown host.
+
 ### 4. Present the deployment instruction (copy-paste, not auto-run)
 
 Each `bash` block runs in its own subshell, so FM_* from step 3 is gone here.
@@ -91,6 +99,8 @@ Key auth still failing. Most common causes:
   1. SSH service not enabled / wrong port.
   2. ssh-copy-id was not run with the leading `!`.
   3. User has no shell access on the server.
+  4. Host key not yet in ~/.ssh/known_hosts (BatchMode cannot prompt) — add it:
+     ssh-keyscan -p <port> <host> >> ~/.ssh/known_hosts  (review the fingerprint).
 Re-run /setup-ssh.
 MSG
   exit 1
