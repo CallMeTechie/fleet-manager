@@ -1,6 +1,6 @@
 {
-  "name": "fleet-manager-local",
-  "owner": { "name": "Marc Backes", "url": "https://github.com/CallMeTechie" },
+  "name": "fleet-manager",
+  "owner": { "name": "CallMeTechie", "url": "https://github.com/CallMeTechie" },
   "plugins": [
     {
       "name": "fleet-manager",

@@ -66,7 +66,7 @@ jobs:
             echo "Tag $TAG already exists — nothing to release."; exit 0
           fi
           git config user.name "CallMeTechie"
-          git config user.email "ma.backes@outlook.com"
+          git config user.email "34693633+CallMeTechie@users.noreply.github.com"
           git tag -a "$TAG" -m "fleet-manager $TAG"
           git push origin "$TAG"
           gh release create "$TAG" --title "fleet-manager $TAG" --generate-notes

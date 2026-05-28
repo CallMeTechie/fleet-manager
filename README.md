@@ -4,8 +4,8 @@ A Claude Code plugin for managing a **fleet of Linux servers** over SSH. Keeps a
 per-server inventory and an "active server" pointer, deploys a dedicated SSH key,
 and provides guided setup, connectivity diagnostics and system status across hosts.
 
-Modeled on [`synology-manager-plus`](https://github.com/CallMeTechie); the NAS stays
-there (DSM-specific), `fleet-manager` is for generic Linux hosts.
+Modeled on [`synology-manager-plus`](https://github.com/CallMeTechie/synology-manager-plus);
+the NAS stays there (DSM-specific), `fleet-manager` is for generic Linux hosts.
 
 ## Workspace & persistence
 
@@ -73,4 +73,4 @@ brought up with `/compose-up --file /abs/path/docker-compose.yml`.
 
 ## License
 
-MIT — Marc Backes (CallMeTechie)
+MIT — CallMeTechie

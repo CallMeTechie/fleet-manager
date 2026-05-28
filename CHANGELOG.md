@@ -3,6 +3,24 @@
 All notable changes to fleet-manager are documented here. Format: Keep a Changelog;
 versioning: SemVer.
 
+## [0.3.1] - 2026-05-28
+
+### Changed
+
+- Replace personal author/copyright name with `CallMeTechie` across README,
+  LICENSE, `plugin.json`, and `marketplace.json` for a consistent public identity.
+- `marketplace.json.name`: rename `fleet-manager-local` → `fleet-manager` to
+  match the public repository.
+- Release-job git config now uses the GitHub noreply address.
+
+### Added
+
+- `plugin.json`: `homepage` and `repository` fields pointing at the public repo.
+
+### Fixed
+
+- README link to sibling plugin now points to its repository, not the user profile.
+
 ## [0.3.0] - 2026-05-27
 
 ### Added
