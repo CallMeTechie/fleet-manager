@@ -30,7 +30,7 @@ inventory with `/list-servers`, never by reading hostnames out of this file.
 
 | Command | Description |
 | - | - |
-| `/first-run` | Onboard your first server (interactive intake agent) |
+| `/first-run` | Onboard your first server (guided intake) |
 | `/add-server` | Add another server to the inventory |
 | `/list-servers` | Show the inventory; mark the active server |
 | `/use <name>` | Set the active server |

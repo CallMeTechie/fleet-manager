@@ -26,6 +26,20 @@ Protected Resources and Notes). Ask the user via `AskUserQuestion`:
   Resources and Notes.
 - "Abbrechen".
 
-Otherwise (new server) use Claude's native **Task tool** to invoke the subagent
-named `fleet-intake` with the same instruction as `/first-run` but for an additional
-server, and ask at the end whether to make it the active server.
+Otherwise (new server): run the **intake dialogue from `/first-run` step 1**
+yourself, here in the main thread, then dispatch the `fleet-intake` subagent with
+the collected values exactly as `/first-run` step 2 describes, and handle its
+return value as `/first-run` step 3 describes.
+
+The subagent has no `AskUserQuestion` tool — subagents cannot reach the user — so
+it must never be dispatched before every answer is in hand.
+
+Two differences from `/first-run`:
+
+- The inventory is not empty, so `<name>` must not collide with an existing
+  profile. The bash block above already reports a collision for an argument-supplied
+  name; re-check with `profile_exists` after the dialogue if the user typed a
+  different one.
+- Do not assume the new server should become active. Dispatch with
+  `set_active=no`, then ask via `AskUserQuestion` after a successful intake, and
+  only run `set_active <name>; write_inventory` if the user says yes.
