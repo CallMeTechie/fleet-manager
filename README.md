@@ -9,9 +9,15 @@ the NAS stays there (DSM-specific), `fleet-manager` is for generic Linux hosts.
 
 ## Workspace & persistence
 
-The repo IS your workspace. **Real inventory lives locally and is git-ignored**
-(`plugin/context/servers/*.md`, `active-server`, `inventory.md`) — only templates are
-committed, so server topology never lands in git and survives `claude plugin update`.
+**Your real inventory lives outside the plugin**, in
+`${XDG_CONFIG_HOME:-~/.config}/fleet-manager` (`servers/*.md`, `active-server`,
+`inventory.md`). It is therefore never committed — server topology cannot land in
+git — and it survives `claude plugin update`, which replaces the whole
+version-pinned plugin directory. Set `FM_CONTEXT_DIR` to relocate it.
+
+Installs from before 0.3.3 kept this state inside the plugin directory, where each
+update stranded it. The library copies such an inventory forward automatically on
+first use and leaves the originals in place.
 
 ## Commands
 
