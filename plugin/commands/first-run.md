@@ -24,5 +24,5 @@ do not write `Task(...)` in a script) to invoke the subagent named `fleet-intake
 > connection details, write the profile's Connection section, deploy the plugin
 > SSH key (`/setup-ssh` flow — present `! ssh-copy-id …` as copy-paste, never run
 > it yourself), run discovery, capture authorized scopes, write the full profile,
-> set it active, regenerate inventory.md, and update the CLAUDE.md managed block.
+> set it active, and regenerate inventory.md.
 > Be conversational and ask one question at a time.

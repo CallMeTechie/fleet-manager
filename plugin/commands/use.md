@@ -27,8 +27,6 @@ else
 fi
 ```
 
-After running, update the **Active Server** line inside the
-`<!-- fleet-manager:managed-start -->` / `:managed-end` block of
-`${CLAUDE_PLUGIN_ROOT:-plugin}/CLAUDE.md` to the friendly name `$ARGUMENTS`
-(no host/IP). If the server does not exist, `set_active` prints the available
-list and exits non-zero — relay that to the user.
+`set_active` is the only place the active server is recorded — do not mirror the
+name into any other file. If the server does not exist, `set_active` prints the
+available list and exits non-zero — relay that to the user.
