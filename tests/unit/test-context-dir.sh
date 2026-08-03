@@ -12,6 +12,10 @@ PASS=0; FAIL=0
 ok() { PASS=$((PASS+1)); echo "ok   - $1"; }
 no() { FAIL=$((FAIL+1)); echo "FAIL - $1"; }
 assert_eq() { if [ "$1" = "$2" ]; then ok "$3"; else no "$3 (want='$2' got='$1')"; fi; }
+# Spelled out rather than `A && B || C`: with that idiom C also runs when A is
+# true but B fails, which turns a single result into a pass *and* a fail (SC2015).
+assert_exists() { if [ -e "$1" ]; then ok "$2"; else no "$2"; fi; }
+assert_absent() { if [ -e "$1" ]; then no "$2"; else ok "$2"; fi; }
 
 TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
 
@@ -47,21 +51,21 @@ printf 'web\n'           > "$FAKE/context/active-server"
 printf 'template\n'      > "$FAKE/context/servers/EXAMPLE.md.template"
 
 XDG_CONFIG_HOME="$TMP/mig" bash -c 'unset FM_CONTEXT_DIR; source "$1"' _ "$FAKE/commands/_fleet-lib.sh" 2>/dev/null
-[ -f "$TMP/mig/fleet-manager/servers/web.md" ] && ok "migration copied web.md" || no "migration copied web.md"
-[ -f "$TMP/mig/fleet-manager/servers/db.md" ]  && ok "migration copied db.md"  || no "migration copied db.md"
+assert_exists "$TMP/mig/fleet-manager/servers/web.md" "migration copied web.md"
+assert_exists "$TMP/mig/fleet-manager/servers/db.md"  "migration copied db.md"
 assert_eq "$(cat "$TMP/mig/fleet-manager/active-server" 2>/dev/null)" "web" "migration carried active-server"
-[ -f "$TMP/mig/fleet-manager/servers/EXAMPLE.md.template" ] && no "template must not be migrated" || ok "template not migrated"
-[ -f "$FAKE/context/servers/web.md" ] && ok "migration is non-destructive (original kept)" || no "migration is non-destructive (original kept)"
+assert_absent "$TMP/mig/fleet-manager/servers/EXAMPLE.md.template" "template not migrated"
+assert_exists "$FAKE/context/servers/web.md" "migration is non-destructive (original kept)"
 
 # --- 6. migration never clobbers a populated inventory ---
 mkdir -p "$TMP/live/fleet-manager/servers"
 printf '# Server: live\n' > "$TMP/live/fleet-manager/servers/live.md"
 XDG_CONFIG_HOME="$TMP/live" bash -c 'unset FM_CONTEXT_DIR; source "$1"' _ "$FAKE/commands/_fleet-lib.sh" 2>/dev/null
-[ -f "$TMP/live/fleet-manager/servers/web.md" ] && no "must not migrate into a populated inventory" || ok "populated inventory left untouched"
+assert_absent "$TMP/live/fleet-manager/servers/web.md" "populated inventory left untouched"
 
 # --- 7. migration is a no-op when the override is set ---
 XDG_CONFIG_HOME="$TMP/unused" FM_CONTEXT_DIR="$TMP/override" bash -c 'source "$1"' _ "$FAKE/commands/_fleet-lib.sh" 2>/dev/null
-[ -d "$TMP/override/servers" ] && no "override path must not be auto-populated" || ok "no migration under FM_CONTEXT_DIR"
+assert_absent "$TMP/override/servers" "no migration under FM_CONTEXT_DIR"
 
 echo "----"
 echo "PASS=$PASS FAIL=$FAIL"
