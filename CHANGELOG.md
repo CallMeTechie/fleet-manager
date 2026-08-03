@@ -3,6 +3,27 @@
 All notable changes to fleet-manager are documented here. Format: Keep a Changelog;
 versioning: SemVer.
 
+## [0.3.4] - 2026-08-03
+
+### Fixed
+
+- `/first-run` and `/add-server` could not onboard a server at all. The
+  `fleet-intake` agent declared `AskUserQuestion` in its frontmatter, but
+  subagents are not granted that tool — the interaction channel belongs to the
+  main thread — so the agent aborted at its first question. `/first-run` did not
+  list `AskUserQuestion` in `allowed-tools` either, so neither side could ask.
+- The intake dialogue now runs in the command, in the main thread, and
+  `fleet-intake` is dispatched non-interactively with every value in hand. It
+  hands control back via `NEEDS_KEY_DEPLOY` / `NEEDS_INPUT` / `FAILED` instead of
+  waiting for a confirmation it can never receive.
+
+### Added
+
+- `set_active` input for `fleet-intake`, so `/add-server` can onboard a server
+  without silently stealing the active pointer. `/first-run` passes `yes`.
+- `tests/static/frontmatter-check.sh` now rejects `AskUserQuestion` in any agent
+  frontmatter, so the same dead-end cannot be reintroduced.
+
 ## [0.3.3] - 2026-08-03
 
 ### Fixed

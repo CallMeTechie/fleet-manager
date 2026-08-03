@@ -23,7 +23,7 @@ first use and leaves the originals in place.
 
 | Command | Description |
 | - | - |
-| `/first-run` | Onboard your first server (interactive intake agent) |
+| `/first-run` | Onboard your first server (guided intake) |
 | `/add-server` | Add another server (re-add protected) |
 | `/list-servers` | Show the inventory; mark the active server |
 | `/use <name>` | Set the active server |
