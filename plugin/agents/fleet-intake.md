@@ -46,9 +46,8 @@ You onboard ONE server into the fleet-manager workspace. Source the shared lib a
    file_transfer to authorize. Tick the matching `- [x]` boxes in the profile.
 
 8. **Finalize**: write Identity + Discovered State + Scoped Operations + a UTC
-   `Last Updated` timestamp into the profile; `set_active <name>`; `write_inventory`;
-   update the CLAUDE.md managed-block **Active Server** line to the friendly name
-   (no host/IP). All file writes via the lib's atomic helpers where available.
+   `Last Updated` timestamp into the profile; `set_active <name>`; `write_inventory`.
+   All file writes via the lib's atomic helpers where available.
 
 9. **Summary**: server name, host, os, docker/sudo flags, authorized scopes, and
    suggested next commands (`/diag`, `/status`, `/list-servers`).

@@ -3,6 +3,29 @@
 All notable changes to fleet-manager are documented here. Format: Keep a Changelog;
 versioning: SemVer.
 
+## [0.3.2] - 2026-08-03
+
+### Fixed
+
+- `plugin.json`: `repository` is now a string URL. The object form introduced in
+  0.3.1 failed manifest validation (`expected string, received object`) and made
+  `claude plugin install fleet-manager@fleet-manager` impossible.
+
+### Changed
+
+- Plugin context moved from `plugin/CLAUDE.md` to `plugin/skills/fleet-manager/SKILL.md`.
+  A `CLAUDE.md` at the plugin root is never loaded as context, so the command
+  reference and operational guidelines it carried had no effect.
+- The active server is now recorded only in `plugin/context/active-server`.
+  `/use`, `/first-run` and the `fleet-intake` agent no longer mirror it into a
+  managed block — that duplicate dirtied a version-controlled file on every
+  `/use` and was overwritten on `plugin update`.
+
+### Removed
+
+- The `<!-- fleet-manager:managed-start -->` block and the session `Notes`
+  section, along with `plugin/CLAUDE.md` itself.
+
 ## [0.3.1] - 2026-05-28
 
 ### Changed

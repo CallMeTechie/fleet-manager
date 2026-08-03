@@ -1,10 +1,10 @@
 {
   "name": "fleet-manager",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Multi-server SSH management for Claude Code. Inventory of servers with an active-server model, guided setup, SSH key deployment, connectivity diagnostics, and system status across a fleet of Linux hosts.",
   "author": { "name": "CallMeTechie", "url": "https://github.com/CallMeTechie" },
   "homepage": "https://github.com/CallMeTechie/fleet-manager",
-  "repository": { "type": "git", "url": "https://github.com/CallMeTechie/fleet-manager" },
+  "repository": "https://github.com/CallMeTechie/fleet-manager",
   "license": "MIT",
   "keywords": ["ssh", "fleet", "sysadmin", "multi-server", "remote", "monitoring", "docker", "compose"]
 }
