@@ -1,4 +1,6 @@
-# Real inventory — local only, never committed (topology leak / survives plugin update)
+# Real inventory lives in $XDG_CONFIG_HOME/fleet-manager, outside the repo. These
+# entries only catch a stray in-plugin inventory (pre-0.3.3 layout, or a local run
+# with FM_CONTEXT_DIR pointed here) so topology can never leak into git.
 plugin/context/servers/*.md
 !plugin/context/servers/*.md.template
 plugin/context/active-server

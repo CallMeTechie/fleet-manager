@@ -6,18 +6,55 @@
 # This file is SOURCED, so it must not call `set -e` or `exit`. Functions
 # `return` non-zero on error and print diagnostics to stderr.
 
-# Context dir: tests override via FM_CONTEXT_DIR. Otherwise resolve RELATIVE TO
-# THIS lib's location (commands/ -> ../context), NOT the CWD — commands source us
-# via an absolute $CLAUDE_PLUGIN_ROOT, so a relative "context" default would write
-# to the wrong directory when CWD != plugin root (review #3, Critical).
+# Context dir, in precedence order:
+#   1. $FM_CONTEXT_DIR — explicit override (tests, custom setups)
+#   2. XDG config dir  — the default
+#
+# It must NOT be derived from this lib's own location. Claude Code installs the
+# plugin into a version-pinned cache directory (.../fleet-manager/0.3.2/), so a
+# lib-relative context dir is abandoned on every plugin update: the new version
+# starts with an empty inventory and the old profiles are stranded in the
+# previous version's directory. Never resolve it from the CWD either — commands
+# source us via an absolute $CLAUDE_PLUGIN_ROOT and run from anywhere
+# (review #3, Critical).
 if [ -n "${FM_CONTEXT_DIR:-}" ]; then
   FM_CONTEXT="$FM_CONTEXT_DIR"
 else
-  _fm_lib_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  FM_CONTEXT="$(cd "$_fm_lib_dir/.." && pwd)/context"
+  FM_CONTEXT="${XDG_CONFIG_HOME:-$HOME/.config}/fleet-manager"
 fi
 FM_SERVERS_DIR="$FM_CONTEXT/servers"
 FM_ACTIVE_FILE="$FM_CONTEXT/active-server"
+
+# _fm_count_profiles <dir> — number of real profiles in <dir>. Templates are
+# named *.md.template and so never match the *.md glob.
+_fm_count_profiles() {
+  local f n=0
+  for f in "${1:-}"/*.md; do [ -e "$f" ] && n=$((n+1)); done
+  printf '%s' "$n"
+}
+
+# Migrate a pre-0.3.3 in-plugin inventory forward, once. Only fires when the
+# legacy directory holds real profiles and the new one holds none, so it cannot
+# clobber a live inventory. Copies rather than moves — the originals stay put in
+# the old version's cache directory, which the next plugin update discards.
+_fm_migrate_legacy_context() {
+  local lib_dir legacy
+  [ -n "${FM_CONTEXT_DIR:-}" ] && return 0
+  lib_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" || return 0
+  legacy="$(cd "$lib_dir/.." && pwd)/context" || return 0
+  [ "$legacy" = "$FM_CONTEXT" ] && return 0
+  [ -d "$legacy/servers" ] || return 0
+  [ "$(_fm_count_profiles "$legacy/servers")" -gt 0 ] || return 0
+  [ "$(_fm_count_profiles "$FM_SERVERS_DIR")" -eq 0 ] || return 0
+
+  mkdir -p "$FM_SERVERS_DIR" || return 0
+  cp -p "$legacy"/servers/*.md "$FM_SERVERS_DIR"/ 2>/dev/null || return 0
+  if [ -f "$legacy/active-server" ]; then
+    cp -p "$legacy/active-server" "$FM_ACTIVE_FILE" 2>/dev/null || true
+  fi
+  echo "fleet-manager: migrated inventory $legacy -> $FM_CONTEXT (originals left in place)." >&2
+}
+_fm_migrate_legacy_context
 
 # sanitize_value <raw> — strip CR and surrounding whitespace from any value
 # that will be written into a profile (Concern 4, R2).

@@ -3,6 +3,27 @@
 All notable changes to fleet-manager are documented here. Format: Keep a Changelog;
 versioning: SemVer.
 
+## [0.3.3] - 2026-08-03
+
+### Fixed
+
+- The inventory no longer lives inside the plugin directory. `_fleet-lib.sh`
+  derived `FM_CONTEXT` from its own location, which Claude Code installs into a
+  version-pinned cache path (`.../fleet-manager/0.3.2/context`). Every
+  `claude plugin update` therefore started from an empty inventory and stranded
+  the previous version's server profiles, `active-server` and `inventory.md` in
+  a directory nobody looks at. The default is now
+  `${XDG_CONFIG_HOME:-~/.config}/fleet-manager`; `FM_CONTEXT_DIR` still
+  overrides it.
+
+### Added
+
+- One-time migration of a pre-0.3.3 in-plugin inventory. It fires only when the
+  legacy directory holds real profiles and the new one holds none, so it cannot
+  clobber a live inventory, and it copies rather than moves.
+- `tests/unit/test-context-dir.sh`: covers override precedence, the XDG default,
+  the `$HOME/.config` fallback, and all migration guards.
+
 ## [0.3.2] - 2026-08-03
 
 ### Fixed
